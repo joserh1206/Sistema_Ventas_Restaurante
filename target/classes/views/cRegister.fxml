@@ -44,7 +44,7 @@
       <TextField fx:id="inputPassword" layoutX="130.0" layoutY="188.0" prefHeight="26.0" prefWidth="310.0" />
       <TextField fx:id="inputPhone" layoutX="130.0" layoutY="228.0" prefHeight="26.0" prefWidth="310.0" />
       <TextArea fx:id="inputAddress" layoutX="130.0" layoutY="276.0" prefHeight="59.0" prefWidth="310.0" />
-      <Button fx:id="buttonSave" layoutX="349.0" layoutY="352.0" mnemonicParsing="false" text="Registrarte" />
-      <Button fx:id="buttonBack" layoutX="376.0" layoutY="44.0" mnemonicParsing="false" text="Volver" />
+      <Button fx:id="buttonSave" layoutX="349.0" layoutY="352.0" mnemonicParsing="false" onAction="#registerClient" text="Registrarte" />
+      <Button fx:id="buttonBack" layoutX="376.0" layoutY="44.0" mnemonicParsing="false" onAction="#goback" text="Volver" />
    </children>
 </AnchorPane>

@@ -2,29 +2,27 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="945.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="945.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CMenuController">
    <children>
       <Text layoutX="28.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sistema de Pedidos">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <TreeTableView fx:id="tableMenu" layoutX="28.0" layoutY="162.0" prefHeight="417.0" prefWidth="451.0" />
-      <Text layoutX="28.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menú">
+      <Text layoutX="28.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menú">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Separator layoutX="499.0" layoutY="137.0" orientation="VERTICAL" prefHeight="458.0" prefWidth="0.0" />
-      <TreeTableView fx:id="tableBill" layoutX="532.0" layoutY="162.0" prefHeight="242.0" prefWidth="390.0" />
-      <Text layoutX="532.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pedido actual">
+      <Separator layoutX="501.0" layoutY="109.0" orientation="VERTICAL" prefHeight="506.0" prefWidth="0.0" />
+      <Text layoutX="532.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pedido actual">
          <font>
             <Font size="20.0" />
          </font>
@@ -49,12 +47,26 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <CheckBox fx:id="checkBoxExpress" layoutX="532.0" layoutY="496.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF;" text="Usar servicio express">
+      <CheckBox fx:id="checkBoxExpress" layoutX="532.0" layoutY="476.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF;" text="Usar servicio express">
          <font>
             <Font size="15.0" />
          </font>
       </CheckBox>
       <Button fx:id="buttonPay" layoutX="532.0" layoutY="553.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="390.0" text="Pagar" />
       <Button fx:id="buttonOut" layoutX="882.0" layoutY="28.0" mnemonicParsing="false" text="Salir" />
+      <Text layoutX="28.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Combos">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="534.0" layoutY="530.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione una sucursal:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <ChoiceBox fx:id="choiceBOffice" layoutX="708.0" layoutY="512.0" prefHeight="26.0" prefWidth="164.0" />
+      <TableView fx:id="tableCombos" layoutX="28.0" layoutY="440.0" prefHeight="170.0" prefWidth="451.0" />
+      <TableView fx:id="tableMenu" layoutX="28.0" layoutY="162.0" prefHeight="242.0" prefWidth="451.0" />
+      <TableView fx:id="tableBill" layoutX="532.0" layoutY="162.0" prefHeight="242.0" prefWidth="390.0" />
    </children>
 </AnchorPane>

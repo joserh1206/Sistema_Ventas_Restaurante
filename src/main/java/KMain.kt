@@ -11,6 +11,7 @@ class KMain : Application() {
         if(primaryStage != null){
             primaryStage.scene = scene
             primaryStage.isResizable = false
+            primaryStage.title = "Iniciar sesión"
             primaryStage.show()
         }
     }
