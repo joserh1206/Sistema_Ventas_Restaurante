@@ -1,14 +1,18 @@
 package controllers;
 
-import code.Combo;
-import code.DBConnection;
+import code.*;
+import code.Menu;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,15 +23,24 @@ public class CMenuController implements Initializable {
 
     @FXML private TableView tableCombos;
     @FXML private TableView tableMenu;
-    @FXML private ChoiceBox choiceBOffice;
+    @FXML private TableView tableBill;
+    @FXML private ChoiceBox<String> choiceBOffice;
+    @FXML private Text textTotal;
+    @FXML private Text textTime;
+
+    int total = 0;
+    int totalTime = 0;
 
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            Menu.orderList.clear();
             Connection connection = DBConnection.Companion.getConnection();
 
             setTableViewCombo();
             setTableViewMenu();
+            setTableViewOrder();
             setChoiceBOffice(DBConnection.Companion.getBranchOffice(connection));
+            tableBill.setItems(Menu.orderList);
             tableCombos.setItems(DBConnection.Companion.viewCombos(connection));
             tableMenu.setItems(DBConnection.Companion.viewDishes(connection));
 
@@ -38,6 +51,68 @@ public class CMenuController implements Initializable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void getComboSelected(MouseEvent event) {
+        try{
+            Combo combo = (Combo) tableCombos.getSelectionModel().getSelectedItem();
+            total = total + combo.getPrice();
+            totalTime = totalTime + combo.getPTime();
+            textTotal.setText(String.valueOf(total));
+            textTime.setText(String.valueOf(totalTime));
+            Menu.orderList.add(combo);
+            tableBill.setItems(Menu.orderList);
+            ObservableList<Object> newOrderList = FXCollections.observableArrayList();
+            newOrderList.addAll(Menu.orderList);
+            tableBill.getItems().clear();
+            tableBill.getItems().addAll(newOrderList);
+
+        } catch (NullPointerException n){
+
+        }
+    }
+
+    @FXML
+    void getDishSelected(MouseEvent event) {
+        try{
+            Dish dish = (Dish) tableMenu.getSelectionModel().getSelectedItem();
+            total = total + dish.getPrice();
+            totalTime = totalTime + dish.getPTime();
+            textTotal.setText(String.valueOf(total));
+            textTime.setText(String.valueOf(totalTime));
+            Menu.orderList.add(dish);
+            tableBill.setItems(Menu.orderList);
+            ObservableList<Object> newOrderList = FXCollections.observableArrayList();
+            newOrderList.addAll(Menu.orderList);
+            tableBill.getItems().clear();
+            tableBill.getItems().addAll(newOrderList);
+
+        } catch (NullPointerException n){
+
+        }
+    }
+
+    @FXML
+    void deleteElement(MouseEvent event) {
+        Object object = tableBill.getSelectionModel().getSelectedItem();
+        if(object.getClass() == Dish.class){
+            Dish dish = (Dish) tableBill.getSelectionModel().getSelectedItem();
+            total = total - dish.getPrice();
+            totalTime = totalTime - dish.getPTime();
+        } else {
+            Combo combo = (Combo) tableBill.getSelectionModel().getSelectedItem();
+            total = total - combo.getPrice();
+            totalTime = totalTime - combo.getPTime();
+        }
+        Menu.orderList.remove(object);
+        tableBill.setItems(Menu.orderList);
+        ObservableList<Object> newOrderList = FXCollections.observableArrayList();
+        newOrderList.addAll(Menu.orderList);
+        tableBill.getItems().clear();
+        tableBill.getItems().addAll(newOrderList);
+        textTotal.setText(String.valueOf(total));
+        textTime.setText(String.valueOf(totalTime));
     }
 
     private void setTableViewCombo() {
@@ -55,17 +130,27 @@ public class CMenuController implements Initializable {
     }
 
     private void setTableViewMenu() {
-        TableColumn<Combo, String> tcName = new TableColumn<Combo, String>("Nombre");
-        TableColumn<Combo, String> tcType = new TableColumn<Combo, String>("Tipo");
-        TableColumn<Combo, String> tcPrice = new TableColumn<Combo, String>("Precio");
-        TableColumn<Combo, String> tcPTime = new TableColumn<Combo, String>("Tiempo de preparacion");
+        TableColumn<Dish, String> tcName = new TableColumn<Dish, String>("Nombre");
+        TableColumn<Dish, String> tcType = new TableColumn<Dish, String>("Tipo");
+        TableColumn<Dish, String> tcPrice = new TableColumn<Dish, String>("Precio");
+        TableColumn<Dish, String> tcPTime = new TableColumn<Dish, String>("Tiempo de preparacion");
 
         tableMenu.getColumns().addAll(tcName, tcType, tcPrice, tcPTime);
 
-        tcName.setCellValueFactory(new PropertyValueFactory<Combo, String>("name"));
-        tcType.setCellValueFactory(new PropertyValueFactory<Combo, String>("type"));
-        tcPrice.setCellValueFactory(new PropertyValueFactory<Combo, String>("price"));
-        tcPTime.setCellValueFactory(new PropertyValueFactory<Combo, String>("pTime"));
+        tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
+        tcType.setCellValueFactory(new PropertyValueFactory<Dish, String>("type"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<Dish, String>("price"));
+        tcPTime.setCellValueFactory(new PropertyValueFactory<Dish, String>("pTime"));
+    }
+
+    private void setTableViewOrder() {
+        TableColumn<Dish, String> tcName = new TableColumn<Dish, String>("Nombre");
+        TableColumn<Dish, String> tcPrice = new TableColumn<Dish, String>("Precio");
+
+        tableBill.getColumns().addAll(tcName, tcPrice);
+
+        tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<Dish, String>("price"));
     }
 
     public void setChoiceBOffice(ResultSet resultSet) throws SQLException {
@@ -74,6 +159,17 @@ public class CMenuController implements Initializable {
             choiceBOffice.getItems().add(resultSet.getString(1));
         }
         choiceBOffice.getSelectionModel().selectFirst();
+    }
+
+    @FXML
+    void goBack(ActionEvent event) throws IOException {
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Esta seguro que desea salir?", ButtonType.YES, ButtonType.NO);
+        confirmation.showAndWait();
+        if(confirmation.getResult() == ButtonType.YES) {
+            WindowBuilder.Companion.createWindow("../views/login.fxml", event, "Iniciar sesión");
+        } else {
+            confirmation.close();
+        }
     }
 
 }

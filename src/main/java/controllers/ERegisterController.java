@@ -2,12 +2,16 @@ package controllers;
 
 import code.DBConnection;
 import code.Employee;
+import code.Payroll;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +27,8 @@ public class ERegisterController implements Initializable {
     @FXML private ComboBox<String> selectRole;
     @FXML private ComboBox<String> selectOffice;
     @FXML private Slider salaryRange;
+    @FXML private Text labelSalary;
+    @FXML private TextField inputName;
 
     private ArrayList<Integer> minSalary = new ArrayList<Integer>();
     private ArrayList<Integer> maxSalary = new ArrayList<Integer>();
@@ -50,8 +56,10 @@ public class ERegisterController implements Initializable {
             selectOffice.getSelectionModel().selectFirst();
             salaryRange.setMin(minSalary.get(0));
             salaryRange.setMax(maxSalary.get(0));
-            salaryRange.setBlockIncrement(10);
-            salaryRange.setShowTickLabels(true);
+            salaryRange.setBlockIncrement(1000);
+            salaryRange.setShowTickLabels(false);
+            salaryRange.setShowTickMarks(false);
+            labelSalary.setText(String.valueOf(minSalary.get(0)));
 
             connection.close();
 
@@ -64,19 +72,31 @@ public class ERegisterController implements Initializable {
 
     @FXML
     void updateLabel(MouseEvent event) {
-
+        labelSalary.setText(String.valueOf(Math.round(salaryRange.getValue())));
     }
 
     @FXML
     void updateSlider(ActionEvent event) {
-        Integer index = role.indexOf(selectRole.getValue());
+        int index = role.indexOf(selectRole.getValue());
+        salaryRange.setValue(minSalary.get(index));
+        labelSalary.setText(String.valueOf(minSalary.get(index)));
         salaryRange.setMin(minSalary.get(index));
         salaryRange.setMax(maxSalary.get(index));
     }
 
     @FXML
-    void saveEmployee(ActionEvent event){
+    void saveEmployee(ActionEvent event) throws SQLException, ClassNotFoundException {
 //        WindowBuilder.Companion.createWindow("../views/aMenu.fxml", event, "Panel de control");
+        Connection connection = DBConnection.Companion.getConnection();
+        DBConnection.Companion.addEmployee(connection, inputName.getText(), selectRole.getValue(),
+                (int)Math.round(salaryRange.getValue()), selectOffice.getValue());
+        Payroll.employeeList.add(new Employee(inputName.getText(), selectRole.getValue(),
+                (int)Math.round(salaryRange.getValue()), selectOffice.getValue()));
+        ObservableList<Employee> newEmployeeList = FXCollections.observableArrayList();
+        newEmployeeList.addAll(Payroll.employeeList);
+        tablePayroll.getItems().clear();
+        tablePayroll.getItems().addAll(newEmployeeList);
+        new Alert(Alert.AlertType.INFORMATION, "Empleado ingresado correctamente en el sistema").showAndWait();
     }
 
 

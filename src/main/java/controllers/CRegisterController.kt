@@ -7,6 +7,7 @@ import java.net.URL
 import java.util.*
 import javafx.fxml.FXML
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 
@@ -56,6 +57,12 @@ class CRegisterController : Initializable{
 
     @FXML
     fun goback(event: ActionEvent) {
-        WindowBuilder.createWindow("../views/login.fxml", event, "Lniciar sesión")
+        val confirmation = Alert(Alert.AlertType.CONFIRMATION, "Esta seguro que desea salir?", ButtonType.YES, ButtonType.NO)
+        confirmation.showAndWait()
+        if (confirmation.result == ButtonType.YES) {
+            WindowBuilder.createWindow("../views/login.fxml", event, "Iniciar sesión")
+        } else {
+            confirmation.close()
+        }
     }
 }

@@ -1,5 +1,8 @@
 package code
 
+import code.Menu.comboList
+import code.Menu.dishList
+import code.Payroll.employeeList
 import java.lang.Exception
 import java.sql.Connection
 import java.sql.DriverManager
@@ -7,8 +10,7 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-
-
+import javafx.scene.control.Button
 
 
 class DBConnection {
@@ -62,7 +64,7 @@ class DBConnection {
 
         @Throws(SQLException::class)
         fun viewCombos(con: Connection): ObservableList<Combo> {
-            val comboList = FXCollections.observableArrayList<Combo>()
+            Menu.comboList.clear()
             val query = "{ call viewCombosSP() }"
             val call = con.prepareCall(query)
             var resultSet = call.executeQuery()
@@ -72,7 +74,27 @@ class DBConnection {
                 var price = resultSet.getInt(3)
                 var preparationTime = resultSet.getInt(4)
                 var state = resultSet.getInt(5)
-                var combo = Combo(id, name, price, preparationTime, state)
+                var button = Button("Desactivar")
+                var combo = Combo(id, name, price, preparationTime, state, button)
+                comboList.add(combo)
+            }
+            return comboList
+        }
+
+        @Throws(SQLException::class)
+        fun viewAllCombos(con: Connection): ObservableList<Combo> {
+            Menu.comboList.clear()
+            val query = "{ call viewAllCombosSP() }"
+            val call = con.prepareCall(query)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var id = resultSet.getInt(1)
+                var name = resultSet.getString(2)
+                var price = resultSet.getInt(3)
+                var preparationTime = resultSet.getInt(4)
+                var state = resultSet.getInt(5)
+                var button = Button("Desactivar")
+                var combo = Combo(id, name, price, preparationTime, state, button)
                 comboList.add(combo)
             }
             return comboList
@@ -80,7 +102,7 @@ class DBConnection {
 
         @Throws(SQLException::class)
         fun viewDishes(con: Connection): ObservableList<Dish> {
-            val dishList = FXCollections.observableArrayList<Dish>()
+            Menu.dishList.clear()
             val query = "{ call viewDishSP() }"
             val call = con.prepareCall(query)
             var resultSet = call.executeQuery()
@@ -90,8 +112,29 @@ class DBConnection {
                 var price = resultSet.getInt(3)
                 var preparationTime = resultSet.getInt(4)
                 var state = resultSet.getInt(5)
-                var dish = Dish(name, type, price, preparationTime, state)
+                var button = Button("Desactivar")
+                var dish = Dish(name, type, price, preparationTime, state, button)
                 dishList.add(dish)
+            }
+            return dishList
+        }
+
+        @Throws(SQLException::class)
+        fun viewAllDishes(con: Connection): ObservableList<Dish> {
+            dishList.clear()
+            val query = "{ call viewAllDishSP() }"
+            val call = con.prepareCall(query)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var name = resultSet.getString(1)
+                var type = resultSet.getString(2)
+                var price = resultSet.getInt(3)
+                var preparationTime = resultSet.getInt(4)
+                var state = resultSet.getInt(5)
+                var button = Button("Desactivar")
+                var dish = Dish(name, type, price, preparationTime, state, button)
+                dishList.add(dish)
+                println("$name $price")
             }
             return dishList
         }
@@ -105,7 +148,7 @@ class DBConnection {
 
         @Throws(SQLException::class)
         fun viewEmployees(con: Connection): ObservableList<Employee> {
-            val employeeList = FXCollections.observableArrayList<Employee>()
+            employeeList.clear()
             val query = "{ call viewEmployeeSP() }"
             val call = con.prepareCall(query)
             var resultSet = call.executeQuery()
@@ -125,6 +168,48 @@ class DBConnection {
             val query = "{ call getEmployeeRoleSP() }"
             val call = con.prepareCall(query)
             return call.executeQuery()
+        }
+
+        @Throws(SQLException::class)
+        fun addDish(con: Connection, name: String, price:Int, pTime: Int, type: String){
+            val query = "{ call addIntoMenuSP(?,?,?,?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, name)
+            call.setInt(2, price)
+            call.setInt(3, pTime)
+            call.setString(4, type)
+            call.execute()
+        }
+
+        @Throws(SQLException::class)
+        fun addCombo(con: Connection, name: String, price: Int, pTime: Int, state: Int){
+            val query = "{ call addCombo(?,?,?,?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, name)
+            call.setInt(2, price)
+            call.setInt(3, pTime)
+            call.setInt(4, state)
+            call.execute()
+        }
+
+        @Throws(SQLException::class)
+        fun addComboDish(con: Connection, comboID: Int, dishName: String){
+            val query = "{ call addComboDish(?,?) }"
+            val call = con.prepareCall(query)
+            call.setInt(1, comboID)
+            call.setString(2, dishName)
+            call.execute()
+        }
+
+        @Throws(SQLException::class)
+        fun addEmployee(con: Connection, name: String, role:String, salary: Int, office: String){
+            val query = "{ call employeeRegistrationSP(?,?,?,?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, name)
+            call.setString(2, role)
+            call.setInt(3, salary)
+            call.setString(4, office)
+            call.execute()
         }
 
 

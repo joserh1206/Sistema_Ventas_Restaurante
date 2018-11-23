@@ -1,16 +1,6 @@
 package code
 
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleStringProperty
+import javafx.scene.control.Button
 
 
-class Combo(id: Int, name: String, price: Int, pTime: Int, state: Int) {
-
-    var listaPedidos: ObservableList<String> = FXCollections.observableArrayList<String>()
-
-    fun setProducts(list : ObservableList<String>){
-        listaPedidos = list
-    }
-}
+class Combo(var id: Int, var name: String, var price: Int, var pTime: Int, var state: Int, var buttonDelete: Button)
