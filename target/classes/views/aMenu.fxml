@@ -75,7 +75,7 @@
       </Text>
       <ChoiceBox fx:id="choiceProductType" layoutX="65.0" layoutY="579.0" prefHeight="26.0" prefWidth="198.0" />
       <TableView fx:id="tableMenu" layoutX="22.0" layoutY="153.0" onMouseClicked="#getSelectedDish" prefHeight="276.0" prefWidth="444.0" />
-      <TableView fx:id="tableComboCreator" layoutX="511.0" layoutY="153.0" prefHeight="182.0" prefWidth="408.0" />
+      <TableView fx:id="tableComboCreator" layoutX="511.0" layoutY="153.0" onMouseClicked="#deleteDish" prefHeight="182.0" prefWidth="408.0" />
       <TableView fx:id="tableCombos" layoutX="510.0" layoutY="470.0" prefHeight="136.0" prefWidth="408.0" />
       <Text layoutX="512.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
          <font>

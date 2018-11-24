@@ -16,6 +16,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.EventListener;
 import java.util.ResourceBundle;
 
 public class AMenuController implements Initializable {
@@ -56,55 +57,109 @@ public class AMenuController implements Initializable {
 
     @FXML
     void addDish(ActionEvent event) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.Companion.getConnection();
-        DBConnection.Companion.addDish(connection, inputDishName.getText(), Integer.valueOf(inputDishPrice.getText()),
-                Integer.valueOf(inputPreparationTime.getText()), choiceProductType.getValue());
-        Button button = new Button("Desactivar");
-        Menu.dishList.add(new Dish(inputDishName.getText(), choiceProductType.getValue(),
-                Integer.valueOf(inputDishPrice.getText()), Integer.valueOf(inputPreparationTime.getText()), 1, button));
-        ObservableList<Dish> newDishes = FXCollections.observableArrayList();
-        newDishes.addAll(Menu.dishList);
-        tableMenu.getItems().clear();
-        tableMenu.getItems().addAll(newDishes);
-        new Alert(Alert.AlertType.INFORMATION, "Plato ingresado correctamente en el inventario").showAndWait();
+        boolean flag = true;
+        String dishName = inputDishName.getText();
+        for (Dish dish :
+                Menu.dishList) {
+            if (dish.getName().equals(dishName)){
+                flag = false;
+            }
+        }
+        if(flag) {
+            Connection connection = DBConnection.Companion.getConnection();
+            DBConnection.Companion.addDish(connection, inputDishName.getText(), Integer.valueOf(inputDishPrice.getText()),
+                    Integer.valueOf(inputPreparationTime.getText()), choiceProductType.getValue());
+            Button button = new Button("Desactivar");
+            Menu.dishList.add(new Dish(inputDishName.getText(), choiceProductType.getValue(),
+                    Integer.valueOf(inputDishPrice.getText()), Integer.valueOf(inputPreparationTime.getText()), 1, button));
+            ObservableList<Dish> newDishes = FXCollections.observableArrayList();
+            newDishes.addAll(Menu.dishList);
+            tableMenu.getItems().clear();
+            tableMenu.getItems().addAll(newDishes);
+            new Alert(Alert.AlertType.INFORMATION, "Plato ingresado correctamente en el menú").showAndWait();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "El plato ingresado ya existe en el menú").showAndWait();
+        }
     }
 
+    void disableDish(Dish dish){
+        dish.getButtonDelete().setDisable(true);
+        // TODO: Store Procedure to reflect the status changed in DB
+    }
 
     @FXML
     void getSelectedDish(MouseEvent event) {
         try{
-            Dish dish = (Dish) tableMenu.getSelectionModel().getSelectedItem();
-            DishCombo.dishComboList.add(dish);
-            tableComboCreator.setItems(DishCombo.dishComboList);
-            ObservableList<Dish> newComboDish = FXCollections.observableArrayList();
-            newComboDish.addAll(DishCombo.dishComboList);
-            tableComboCreator.getItems().clear();
-            tableComboCreator.getItems().addAll(newComboDish);
+            if(event.getClickCount() == 3){
+                Dish dish = (Dish) tableMenu.getSelectionModel().getSelectedItem();
+                dish.getButtonDelete().setDisable(false);
+            }
+            if(event.getClickCount() == 2) {
+                Dish dish = (Dish) tableMenu.getSelectionModel().getSelectedItem();
+                DishCombo.dishComboList.add(dish);
+                tableComboCreator.setItems(DishCombo.dishComboList);
+                ObservableList<Dish> newComboDish = FXCollections.observableArrayList();
+                newComboDish.addAll(DishCombo.dishComboList);
+                tableComboCreator.getItems().clear();
+                tableComboCreator.getItems().addAll(newComboDish);
+//                tableComboCreator.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            } else {
+                Dish dish = (Dish) tableMenu.getSelectionModel().getSelectedItem();
+                dish.getButtonDelete().setOnAction(e -> disableDish(dish));
+            }
 
         } catch (NullPointerException n){
 
         }
     }
 
+
+    @FXML
+    void deleteDish(MouseEvent event) {
+        try{
+            Dish dish = (Dish) tableComboCreator.getSelectionModel().getSelectedItem();
+            DishCombo.dishComboList.remove(dish);
+            tableComboCreator.setItems(DishCombo.dishComboList);
+            ObservableList<Dish> newComboDish = FXCollections.observableArrayList();
+            newComboDish.addAll(DishCombo.dishComboList);
+            tableComboCreator.getItems().clear();
+            tableComboCreator.getItems().addAll(newComboDish);
+        } catch (NullPointerException n){
+            System.out.println("Problem");
+        }
+    }
+
     @FXML
     void saveCombo(ActionEvent event) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.Companion.getConnection();
-        int id = Menu.comboList.size() + 1;
-        int pTime = 0;
-        for (Dish dish: DishCombo.dishComboList) {
-            pTime = pTime + dish.getPTime();
+        boolean flag = true;
+        String comboName = inputComboName.getText();
+        for (Combo combo :
+                Menu.comboList) {
+            if (combo.getName().equals(comboName)){
+                flag = false;
+            }
         }
-        DBConnection.Companion.addCombo(connection, inputComboName.getText(), Integer.valueOf(inputComboPrice.getText()), pTime, 1);
-        Menu.comboList.add(new Combo(id, inputComboName.getText(), Integer.valueOf(inputComboPrice.getText()), pTime, 1, new Button("Desactivar")));
-        ObservableList<Combo> newCombos = FXCollections.observableArrayList();
-        newCombos.addAll(Menu.comboList);
-        tableCombos.getItems().clear();
-        tableCombos.getItems().addAll(newCombos);
-        for (Dish dish: DishCombo.dishComboList) {
-            DBConnection.Companion.addComboDish(connection, id, dish.getName());
+        if(flag) {
+            Connection connection = DBConnection.Companion.getConnection();
+            int id = Menu.comboList.size() + 1;
+            int pTime = 0;
+            for (Dish dish : DishCombo.dishComboList) {
+                pTime = pTime + dish.getPTime();
+            }
+            DBConnection.Companion.addCombo(connection, inputComboName.getText(), Integer.valueOf(inputComboPrice.getText()), pTime, 1);
+            Menu.comboList.add(new Combo(id, inputComboName.getText(), Integer.valueOf(inputComboPrice.getText()), pTime, 1, new Button("Desactivar")));
+            ObservableList<Combo> newCombos = FXCollections.observableArrayList();
+            newCombos.addAll(Menu.comboList);
+            tableCombos.getItems().clear();
+            tableCombos.getItems().addAll(newCombos);
+            for (Dish dish : DishCombo.dishComboList) {
+                DBConnection.Companion.addComboDish(connection, id, dish.getName());
+            }
+            new Alert(Alert.AlertType.INFORMATION, "Combo ingresado correctamente en el menú").showAndWait();
+            DishCombo.dishComboList.clear();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "El combo ingresado ya se enceuntra en el menú").showAndWait();
         }
-        new Alert(Alert.AlertType.INFORMATION, "Combo ingresado correctamente en el sistema").showAndWait();
-        DishCombo.dishComboList.clear();
     }
 
     @FXML
@@ -132,6 +187,7 @@ public class AMenuController implements Initializable {
         TableColumn<Dish, Button> tcDisable = new TableColumn<Dish, Button>("");
 
         tableMenu.getColumns().addAll(tcName, tcType, tcPrice, tcPTime, tcDisable);
+        tableMenu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
         tcType.setCellValueFactory(new PropertyValueFactory<Dish, String>("type"));
@@ -145,13 +201,14 @@ public class AMenuController implements Initializable {
         TableColumn<Dish, String> tcType = new TableColumn<Dish, String>("Tipo");
 
         tableComboCreator.getColumns().addAll(tcName, tcType);
+        tableComboCreator.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
         tcType.setCellValueFactory(new PropertyValueFactory<Dish, String>("type"));
     }
 
     private void setTableViewCombo() {
-        TableColumn<Combo, String> tcNumber = new TableColumn<Combo, String>("Numero");
+        TableColumn<Combo, String> tcNumber = new TableColumn<Combo, String>("N°");
         TableColumn<Combo, String> tcName = new TableColumn<Combo, String>("Nombre");
         TableColumn<Combo, String> tcPrice = new TableColumn<Combo, String>("Precio");
         TableColumn<Combo, String> tcPTime = new TableColumn<Combo, String>("Tiempo de preparacion");
@@ -159,6 +216,7 @@ public class AMenuController implements Initializable {
 
 
         tableCombos.getColumns().addAll(tcNumber, tcName, tcPrice, tcPTime, tcDisable);
+        tableCombos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcNumber.setCellValueFactory(new PropertyValueFactory<Combo, String>("id"));
         tcName.setCellValueFactory(new PropertyValueFactory<Combo, String>("name"));

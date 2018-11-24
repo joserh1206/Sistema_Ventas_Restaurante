@@ -27,7 +27,7 @@ public class ERegisterController implements Initializable {
     @FXML private ComboBox<String> selectRole;
     @FXML private ComboBox<String> selectOffice;
     @FXML private Slider salaryRange;
-    @FXML private Text labelSalary;
+    @FXML private TextField  labelSalary;
     @FXML private TextField inputName;
 
     private ArrayList<Integer> minSalary = new ArrayList<Integer>();
@@ -86,20 +86,49 @@ public class ERegisterController implements Initializable {
 
     @FXML
     void saveEmployee(ActionEvent event) throws SQLException, ClassNotFoundException {
-//        WindowBuilder.Companion.createWindow("../views/aMenu.fxml", event, "Panel de control");
-        Connection connection = DBConnection.Companion.getConnection();
-        DBConnection.Companion.addEmployee(connection, inputName.getText(), selectRole.getValue(),
-                (int)Math.round(salaryRange.getValue()), selectOffice.getValue());
-        Payroll.employeeList.add(new Employee(inputName.getText(), selectRole.getValue(),
-                (int)Math.round(salaryRange.getValue()), selectOffice.getValue()));
-        ObservableList<Employee> newEmployeeList = FXCollections.observableArrayList();
-        newEmployeeList.addAll(Payroll.employeeList);
-        tablePayroll.getItems().clear();
-        tablePayroll.getItems().addAll(newEmployeeList);
-        new Alert(Alert.AlertType.INFORMATION, "Empleado ingresado correctamente en el sistema").showAndWait();
+        boolean flag = true;
+        String name = inputName.getText();
+        for (Employee e :
+                Payroll.employeeList) {
+            if (e.getName().equals(name)){
+                flag = false;
+            }
+        }
+        if(flag) {
+            Connection connection = DBConnection.Companion.getConnection();
+            DBConnection.Companion.addEmployee(connection, inputName.getText(), selectRole.getValue(),
+                    (int) Math.round(salaryRange.getValue()), selectOffice.getValue());
+            Payroll.employeeList.add(new Employee(inputName.getText(), selectRole.getValue(),
+                    (int) Math.round(salaryRange.getValue()), selectOffice.getValue()));
+            ObservableList<Employee> newEmployeeList = FXCollections.observableArrayList();
+            newEmployeeList.addAll(Payroll.employeeList);
+            tablePayroll.getItems().clear();
+            tablePayroll.getItems().addAll(newEmployeeList);
+            new Alert(Alert.AlertType.INFORMATION, "Empleado ingresado correctamente en el sistema").showAndWait();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "El empleado ingresado ya se encuentra en el sistema").showAndWait();
+        }
     }
 
-
+    @FXML
+    void updateSliderValue(ActionEvent event) {
+        try {
+            Double value = Double.valueOf(labelSalary.getText());
+            int index = role.indexOf(selectRole.getValue());
+            if(value >= minSalary.get(index) && value <= maxSalary.get(index)){
+                salaryRange.setValue(value);
+            } else {
+                new Alert(Alert.AlertType.ERROR,
+                        "El valor debe encontrarse en el rango: "
+                                + minSalary.get(index)
+                                + " - "
+                                + maxSalary.get(index))
+                        .showAndWait();
+            }
+        } catch (Exception e){
+            new Alert(Alert.AlertType.ERROR, "Debe insertar únicamente números").showAndWait();
+        }
+    }
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
@@ -114,6 +143,7 @@ public class ERegisterController implements Initializable {
         TableColumn<Employee, String> tcOffice = new TableColumn<Employee, String>("Sucursal");
 
         tablePayroll.getColumns().addAll(tcName, tcRole, tcSalary, tcOffice);
+        tablePayroll.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcName.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
         tcRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));

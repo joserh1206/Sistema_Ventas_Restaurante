@@ -8,7 +8,6 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
-import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.control.Button
 
@@ -134,7 +133,6 @@ class DBConnection {
                 var button = Button("Desactivar")
                 var dish = Dish(name, type, price, preparationTime, state, button)
                 dishList.add(dish)
-                println("$name $price")
             }
             return dishList
         }

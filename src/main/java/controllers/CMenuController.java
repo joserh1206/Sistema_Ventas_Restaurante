@@ -95,24 +95,28 @@ public class CMenuController implements Initializable {
 
     @FXML
     void deleteElement(MouseEvent event) {
-        Object object = tableBill.getSelectionModel().getSelectedItem();
-        if(object.getClass() == Dish.class){
-            Dish dish = (Dish) tableBill.getSelectionModel().getSelectedItem();
-            total = total - dish.getPrice();
-            totalTime = totalTime - dish.getPTime();
-        } else {
-            Combo combo = (Combo) tableBill.getSelectionModel().getSelectedItem();
-            total = total - combo.getPrice();
-            totalTime = totalTime - combo.getPTime();
+        try {
+            Object object = tableBill.getSelectionModel().getSelectedItem();
+            if (object.getClass() == Dish.class) {
+                Dish dish = (Dish) tableBill.getSelectionModel().getSelectedItem();
+                total = total - dish.getPrice();
+                totalTime = totalTime - dish.getPTime();
+            } else {
+                Combo combo = (Combo) tableBill.getSelectionModel().getSelectedItem();
+                total = total - combo.getPrice();
+                totalTime = totalTime - combo.getPTime();
+            }
+            Menu.orderList.remove(object);
+            tableBill.setItems(Menu.orderList);
+            ObservableList<Object> newOrderList = FXCollections.observableArrayList();
+            newOrderList.addAll(Menu.orderList);
+            tableBill.getItems().clear();
+            tableBill.getItems().addAll(newOrderList);
+            textTotal.setText(String.valueOf(total));
+            textTime.setText(String.valueOf(totalTime));
+        } catch (NullPointerException n){
+
         }
-        Menu.orderList.remove(object);
-        tableBill.setItems(Menu.orderList);
-        ObservableList<Object> newOrderList = FXCollections.observableArrayList();
-        newOrderList.addAll(Menu.orderList);
-        tableBill.getItems().clear();
-        tableBill.getItems().addAll(newOrderList);
-        textTotal.setText(String.valueOf(total));
-        textTime.setText(String.valueOf(totalTime));
     }
 
     private void setTableViewCombo() {
@@ -122,6 +126,7 @@ public class CMenuController implements Initializable {
         TableColumn<Combo, String> tcPTime = new TableColumn<Combo, String>("Tiempo de preparacion");
 
         tableCombos.getColumns().addAll(tcNumber, tcName, tcPrice, tcPTime);
+        tableCombos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcNumber.setCellValueFactory(new PropertyValueFactory<Combo, String>("id"));
         tcName.setCellValueFactory(new PropertyValueFactory<Combo, String>("name"));
@@ -136,6 +141,7 @@ public class CMenuController implements Initializable {
         TableColumn<Dish, String> tcPTime = new TableColumn<Dish, String>("Tiempo de preparacion");
 
         tableMenu.getColumns().addAll(tcName, tcType, tcPrice, tcPTime);
+        tableMenu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
         tcType.setCellValueFactory(new PropertyValueFactory<Dish, String>("type"));
@@ -148,6 +154,7 @@ public class CMenuController implements Initializable {
         TableColumn<Dish, String> tcPrice = new TableColumn<Dish, String>("Precio");
 
         tableBill.getColumns().addAll(tcName, tcPrice);
+        tableBill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
         tcPrice.setCellValueFactory(new PropertyValueFactory<Dish, String>("price"));
