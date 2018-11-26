@@ -137,18 +137,22 @@ public class ERegisterController implements Initializable {
 
 
     private void setTableViewEmployee() {
-        TableColumn<Employee, String> tcName = new TableColumn<Employee, String>("Nombre");
-        TableColumn<Employee, String> tcRole = new TableColumn<Employee, String>("Rol");
-        TableColumn<Employee, String> tcSalary = new TableColumn<Employee, String>("Salario");
-        TableColumn<Employee, String> tcOffice = new TableColumn<Employee, String>("Sucursal");
+        TableColumn<Employee, String> tcName = new TableColumn<>("Nombre");
+        TableColumn<Employee, String> tcRole = new TableColumn<>("Rol");
+        TableColumn<Employee, String> tcSalary = new TableColumn<>("Salario");
+        TableColumn<Employee, String> tcOffice = new TableColumn<>("Sucursal");
 
         tablePayroll.getColumns().addAll(tcName, tcRole, tcSalary, tcOffice);
         tablePayroll.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tcName.setStyle("-fx-alignment: CENTER;");
+        tcRole.setStyle("-fx-alignment: CENTER;");
+        tcSalary.setStyle("-fx-alignment: CENTER;");
+        tcOffice.setStyle("-fx-alignment: CENTER;");
 
-        tcName.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
-        tcRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
-        tcSalary.setCellValueFactory(new PropertyValueFactory<Employee, String>("salary"));
-        tcOffice.setCellValueFactory(new PropertyValueFactory<Employee, String>("office"));
+        tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tcRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+        tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        tcOffice.setCellValueFactory(new PropertyValueFactory<>("office"));
     }
 
 }

@@ -27,6 +27,8 @@ public class CMenuController implements Initializable {
     @FXML private ChoiceBox<String> choiceBOffice;
     @FXML private Text textTotal;
     @FXML private Text textTime;
+    @FXML private TextField inputAddress;
+    @FXML private CheckBox checkBoxExpress;
 
     int total = 0;
     int totalTime = 0;
@@ -119,45 +121,88 @@ public class CMenuController implements Initializable {
         }
     }
 
+
+    @FXML
+    void payOrder(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
+        Connection connection = DBConnection.Companion.getConnection();
+        int count = DBConnection.Companion.getOrdersCount(connection) + 1;
+        if(checkBoxExpress.isSelected()) {
+            DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getText(),
+                    Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
+        } else {
+            DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getPromptText(),
+                    Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
+        }
+        for (Object obj :
+                Menu.orderList) {
+            if (obj.getClass() == Dish.class){
+                DBConnection.Companion.addOrderDetails(connection, count, ((Dish) obj).getName(), 1);
+            } else {
+                DBConnection.Companion.addOrderDetails(connection, count, ((Combo) obj).getName(), 2);
+            }
+        }
+        WindowBuilder.Companion.createPopUp("../views/cRating.fxml", event, "Califique nuestro servicio");
+        //TODO: Clean up tables and labels
+    }
+
+    @FXML
+    void enableAddressinput(ActionEvent event) {
+        if (checkBoxExpress.isSelected()){
+            inputAddress.disableProperty().setValue(false);
+        } else {
+            inputAddress.disableProperty().setValue(true);
+        }
+    }
+
     private void setTableViewCombo() {
-        TableColumn<Combo, String> tcNumber = new TableColumn<Combo, String>("Numero");
-        TableColumn<Combo, String> tcName = new TableColumn<Combo, String>("Nombre");
-        TableColumn<Combo, String> tcPrice = new TableColumn<Combo, String>("Precio");
-        TableColumn<Combo, String> tcPTime = new TableColumn<Combo, String>("Tiempo de preparacion");
+        TableColumn<Combo, String> tcNumber = new TableColumn<>("Numero");
+        TableColumn<Combo, String> tcName = new TableColumn<>("Nombre");
+        TableColumn<Combo, String> tcPrice = new TableColumn<>("Precio");
+        TableColumn<Combo, String> tcPTime = new TableColumn<>("Tiempo de preparacion");
 
         tableCombos.getColumns().addAll(tcNumber, tcName, tcPrice, tcPTime);
         tableCombos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tcNumber.setStyle("-fx-alignment: CENTER;");
+        tcName.setStyle("-fx-alignment: CENTER;");
+        tcPrice.setStyle("-fx-alignment: CENTER;");
+        tcPTime.setStyle("-fx-alignment: CENTER;");
 
-        tcNumber.setCellValueFactory(new PropertyValueFactory<Combo, String>("id"));
-        tcName.setCellValueFactory(new PropertyValueFactory<Combo, String>("name"));
-        tcPrice.setCellValueFactory(new PropertyValueFactory<Combo, String>("price"));
-        tcPTime.setCellValueFactory(new PropertyValueFactory<Combo, String>("pTime"));
+        tcNumber.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tcPTime.setCellValueFactory(new PropertyValueFactory<>("pTime"));
     }
 
     private void setTableViewMenu() {
-        TableColumn<Dish, String> tcName = new TableColumn<Dish, String>("Nombre");
-        TableColumn<Dish, String> tcType = new TableColumn<Dish, String>("Tipo");
-        TableColumn<Dish, String> tcPrice = new TableColumn<Dish, String>("Precio");
-        TableColumn<Dish, String> tcPTime = new TableColumn<Dish, String>("Tiempo de preparacion");
+        TableColumn<Dish, String> tcName = new TableColumn<>("Nombre");
+        TableColumn<Dish, String> tcType = new TableColumn<>("Tipo");
+        TableColumn<Dish, String> tcPrice = new TableColumn<>("Precio");
+        TableColumn<Dish, String> tcPTime = new TableColumn<>("Tiempo de preparacion");
 
         tableMenu.getColumns().addAll(tcName, tcType, tcPrice, tcPTime);
         tableMenu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tcName.setStyle("-fx-alignment: CENTER;");
+        tcType.setStyle("-fx-alignment: CENTER;");
+        tcPrice.setStyle("-fx-alignment: CENTER;");
+        tcPTime.setStyle("-fx-alignment: CENTER;");
 
-        tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
-        tcType.setCellValueFactory(new PropertyValueFactory<Dish, String>("type"));
-        tcPrice.setCellValueFactory(new PropertyValueFactory<Dish, String>("price"));
-        tcPTime.setCellValueFactory(new PropertyValueFactory<Dish, String>("pTime"));
+        tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tcType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tcPTime.setCellValueFactory(new PropertyValueFactory<>("pTime"));
     }
 
     private void setTableViewOrder() {
-        TableColumn<Dish, String> tcName = new TableColumn<Dish, String>("Nombre");
-        TableColumn<Dish, String> tcPrice = new TableColumn<Dish, String>("Precio");
+        TableColumn<Dish, String> tcName = new TableColumn<>("Nombre");
+        TableColumn<Dish, String> tcPrice = new TableColumn<>("Precio");
 
         tableBill.getColumns().addAll(tcName, tcPrice);
         tableBill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tcName.setStyle("-fx-alignment: CENTER;");
+        tcPrice.setStyle("-fx-alignment: CENTER;");
 
-        tcName.setCellValueFactory(new PropertyValueFactory<Dish, String>("name"));
-        tcPrice.setCellValueFactory(new PropertyValueFactory<Dish, String>("price"));
+        tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     public void setChoiceBOffice(ResultSet resultSet) throws SQLException {

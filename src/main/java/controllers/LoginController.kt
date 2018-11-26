@@ -1,6 +1,7 @@
 package controllers
 
 import code.DBConnection
+import code.Menu
 import javafx.event.ActionEvent
 import javafx.fxml.Initializable
 import java.net.URL
@@ -41,11 +42,13 @@ class LoginController : Initializable {
             1 ->
             {
                 WindowBuilder.createWindow("../views/cMenu.fxml", event, "Restaurante Online")
+                Menu.userName = inputUserName.text
 //                Usuario.usuarioActual = txtUsuario.getText()
             }
             2 ->
             {
                 WindowBuilder.createWindow("../views/aMenu.fxml", event, "Panel de control")
+                Menu.userName = inputUserName.text
 //                Usuario.usuarioActual = txtUsuario.getText()
             }
             0 -> Alert(Alert.AlertType.ERROR, "La contraseña es incorrecta, intente de nuevo").showAndWait()

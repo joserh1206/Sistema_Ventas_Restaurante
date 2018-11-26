@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="625.0" prefWidth="945.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AMenuController">
+<AnchorPane prefHeight="625.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AMenuController">
    <children>
       <Text layoutX="22.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Panel de Control">
          <font>
@@ -21,27 +21,27 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="511.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crear combos">
+      <Text layoutX="631.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crear combos">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="511.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Precio:">
+      <Text layoutX="631.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Precio:">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <TextField fx:id="inputComboPrice" layoutX="572.0" layoutY="347.0" prefHeight="26.0" prefWidth="115.0" />
-      <Button fx:id="buttonSaveCombo" layoutX="761.0" layoutY="346.0" mnemonicParsing="false" onAction="#saveCombo" prefHeight="26.0" prefWidth="157.0" text="Guardar" />
-      <Separator layoutX="487.0" layoutY="114.0" orientation="VERTICAL" prefHeight="478.0" prefWidth="0.0" />
-      <Separator layoutX="501.0" layoutY="427.0" prefHeight="0.0" prefWidth="428.0" />
-      <Text layoutX="510.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Combos actuales">
+      <TextField fx:id="inputComboPrice" layoutX="692.0" layoutY="346.0" prefHeight="26.0" prefWidth="115.0" />
+      <Button fx:id="buttonSaveCombo" layoutX="881.0" layoutY="345.0" mnemonicParsing="false" onAction="#saveCombo" prefHeight="26.0" prefWidth="157.0" text="Guardar" />
+      <Separator layoutX="607.0" layoutY="113.0" orientation="VERTICAL" prefHeight="478.0" prefWidth="0.0" />
+      <Separator layoutX="621.0" layoutY="426.0" prefHeight="3.0" prefWidth="556.0" />
+      <Text layoutX="630.0" layoutY="458.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Combos actuales">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="buttonOut" layoutX="879.0" layoutY="34.0" mnemonicParsing="false" onAction="#goBack" text="Salir" />
-      <Separator layoutX="14.0" layoutY="448.0" prefHeight="3.0" prefWidth="462.0" />
+      <Button fx:id="buttonOut" layoutX="1136.0" layoutY="33.0" mnemonicParsing="false" onAction="#goBack" text="Salir" />
+      <Separator layoutX="14.0" layoutY="448.0" prefHeight="3.0" prefWidth="556.0" />
       <Text layoutX="22.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Agregar plato">
          <font>
             <Font size="20.0" />
@@ -66,22 +66,22 @@
       <TextField fx:id="inputDishPrice" layoutX="351.0" layoutY="501.0" prefHeight="26.0" prefWidth="115.0" />
       <TextField fx:id="inputPreparationTime" layoutX="187.0" layoutY="542.0" prefHeight="26.0" prefWidth="74.0" />
       <Button fx:id="buttonAddDish" layoutX="300.0" layoutY="577.0" mnemonicParsing="false" onAction="#addDish" prefHeight="26.0" prefWidth="166.0" text="Agregar" />
-      <Button fx:id="buttonReports" layoutX="790.0" layoutY="34.0" mnemonicParsing="false" text="Reportes" />
-      <Button fx:id="buttonEmployee" layoutX="687.0" layoutY="35.0" mnemonicParsing="false" onAction="#employeeControl" text="Empleados" />
+      <Button fx:id="buttonReports" layoutX="1047.0" layoutY="33.0" mnemonicParsing="false" text="Reportes" />
+      <Button fx:id="buttonEmployee" layoutX="944.0" layoutY="34.0" mnemonicParsing="false" onAction="#employeeControl" text="Empleados" />
       <Text layoutX="22.0" layoutY="598.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo:">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
       <ChoiceBox fx:id="choiceProductType" layoutX="65.0" layoutY="579.0" prefHeight="26.0" prefWidth="198.0" />
-      <TableView fx:id="tableMenu" layoutX="22.0" layoutY="153.0" onMouseClicked="#getSelectedDish" prefHeight="276.0" prefWidth="444.0" />
-      <TableView fx:id="tableComboCreator" layoutX="511.0" layoutY="153.0" onMouseClicked="#deleteDish" prefHeight="182.0" prefWidth="408.0" />
-      <TableView fx:id="tableCombos" layoutX="510.0" layoutY="470.0" prefHeight="136.0" prefWidth="408.0" />
-      <Text layoutX="512.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
+      <TableView fx:id="tableMenu" layoutX="22.0" layoutY="153.0" onMouseClicked="#getSelectedDish" prefHeight="276.0" prefWidth="546.0" />
+      <TableView fx:id="tableComboCreator" layoutX="631.0" layoutY="152.0" onMouseClicked="#deleteDish" prefHeight="182.0" prefWidth="546.0" />
+      <TableView fx:id="tableCombos" layoutX="630.0" layoutY="469.0" onMouseClicked="#getSelectedCombo" prefHeight="136.0" prefWidth="546.0" />
+      <Text layoutX="632.0" layoutY="401.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <TextField fx:id="inputComboName" layoutX="573.0" layoutY="384.0" prefHeight="26.0" prefWidth="182.0" />
+      <TextField fx:id="inputComboName" layoutX="693.0" layoutY="383.0" prefHeight="26.0" prefWidth="182.0" />
    </children>
 </AnchorPane>

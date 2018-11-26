@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CRatingController">
+   <children>
+      <Text layoutX="193.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="¡Gracias por preferirnos!">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="147.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Por favor califique nuestro servicio para seguir mejorando" />
+      <Slider blockIncrement="1.0" layoutX="177.0" layoutY="115.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" prefHeight="14.0" prefWidth="246.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="5.0" />
+      <Text layoutX="106.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deficiente" />
+      <Text layoutX="440.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Excelente" />
+      <Button fx:id="okButton" layoutX="379.0" layoutY="176.0" mnemonicParsing="false" onAction="#finishOrder" prefHeight="26.0" prefWidth="121.0" text="Listo" />
+   </children>
+</AnchorPane>

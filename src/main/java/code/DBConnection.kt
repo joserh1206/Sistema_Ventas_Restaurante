@@ -62,6 +62,38 @@ class DBConnection {
         }
 
         @Throws(SQLException::class)
+        fun disableDish(con: Connection, dishName: String){
+            val query = "{ call disableDish(?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, dishName)
+            call.executeUpdate()
+        }
+
+        @Throws(SQLException::class)
+        fun enableDish(con: Connection, dishName: String){
+            val query = "{ call enableDish(?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, dishName)
+            call.executeUpdate()
+        }
+
+        @Throws(SQLException::class)
+        fun disableCombo(con: Connection, comboName: String){
+            val query = "{ call disableCombo(?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, comboName)
+            call.executeUpdate()
+        }
+
+        @Throws(SQLException::class)
+        fun enableCombo(con: Connection, comboName: String){
+            val query = "{ call enableCombo(?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, comboName)
+            call.executeUpdate()
+        }
+
+        @Throws(SQLException::class)
         fun viewCombos(con: Connection): ObservableList<Combo> {
             Menu.comboList.clear()
             val query = "{ call viewCombosSP() }"
@@ -93,6 +125,9 @@ class DBConnection {
                 var preparationTime = resultSet.getInt(4)
                 var state = resultSet.getInt(5)
                 var button = Button("Desactivar")
+                if(state == 0){
+                    button.disableProperty().set(true)
+                }
                 var combo = Combo(id, name, price, preparationTime, state, button)
                 comboList.add(combo)
             }
@@ -131,8 +166,12 @@ class DBConnection {
                 var preparationTime = resultSet.getInt(4)
                 var state = resultSet.getInt(5)
                 var button = Button("Desactivar")
+                if (state == 0){
+                    button.disableProperty().set(true)
+                }
                 var dish = Dish(name, type, price, preparationTime, state, button)
                 dishList.add(dish)
+
             }
             return dishList
         }
@@ -177,6 +216,46 @@ class DBConnection {
             call.setInt(3, pTime)
             call.setString(4, type)
             call.execute()
+        }
+
+        @Throws(SQLException::class)
+        fun processOrder(con: Connection, userName: String, address:String, total: Int, office: String){
+            val query = "{ call processOrderSP(?,?,?,?) }"
+            val call = con.prepareCall(query)
+            call.setString(1, userName)
+            call.setString(2, address)
+            call.setInt(3, total)
+            call.setString(4, office)
+            call.execute()
+        }
+
+        @Throws(SQLException::class)
+        fun addOrderDetails(con: Connection, idOrder: Int, name:String, type: Int){
+            if(type == 1) { //Dish
+                val query = "{ call addDishIntoOrderSP(?,?) }"
+                val call = con.prepareCall(query)
+                call.setInt(1, idOrder)
+                call.setString(2, name)
+                call.execute()
+            } else {
+                val query = "{ call addComboIntoOrderSP(?,?) }"
+                val call = con.prepareCall(query)
+                call.setInt(1, idOrder)
+                call.setString(2, name)
+                call.execute()
+            }
+        }
+
+        @Throws(SQLException::class)
+        fun getOrdersCount(con: Connection): Int {
+            var count = -1
+            val query = "{ call getOrdersCount() }"
+            val call = con.prepareCall(query)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()){
+                count = resultSet.getInt(1)
+            }
+            return count
         }
 
         @Throws(SQLException::class)
