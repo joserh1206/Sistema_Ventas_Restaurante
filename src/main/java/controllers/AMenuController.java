@@ -207,6 +207,11 @@ public class AMenuController implements Initializable {
     }
 
     @FXML
+    void openReports(ActionEvent event) throws IOException {
+        WindowBuilder.Companion.createWindow("../views/reports.fxml", event, "Reportes");
+    }
+
+    @FXML
     void employeeControl(ActionEvent event) throws IOException {
         WindowBuilder.Companion.createWindow("../views/eRegister.fxml", event, "Registro de empleados");
     }

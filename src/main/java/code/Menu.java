@@ -8,4 +8,6 @@ public class Menu {
     public static ObservableList<Dish> dishList = FXCollections.observableArrayList();
     public static ObservableList<Combo> comboList = FXCollections.observableArrayList();
     public static ObservableList<Object> orderList = FXCollections.observableArrayList();
+    public static ObservableList<Order> billList = FXCollections.observableArrayList();
+    public static ObservableList<OrderProduct> billDetailList = FXCollections.observableArrayList();
 }

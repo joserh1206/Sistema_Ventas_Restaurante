@@ -53,7 +53,7 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Button fx:id="buttonPay" layoutX="726.0" layoutY="551.0" mnemonicParsing="false" onAction="#payOrder" prefHeight="26.0" prefWidth="390.0" text="Pagar" />
+      <Button fx:id="buttonPay" layoutX="726.0" layoutY="588.0" mnemonicParsing="false" onAction="#payOrder" prefHeight="26.0" prefWidth="390.0" text="Pagar" />
       <Button fx:id="buttonOut" layoutX="1138.0" layoutY="27.0" mnemonicParsing="false" onAction="#goBack" text="Salir" />
       <Text layoutX="28.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Combos">
          <font>
@@ -65,10 +65,17 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <ChoiceBox fx:id="choiceBOffice" layoutX="912.0" layoutY="512.0" prefHeight="26.0" prefWidth="164.0" />
+      <ChoiceBox fx:id="choiceBOffice" layoutX="935.0" layoutY="512.0" prefHeight="26.0" prefWidth="164.0" />
       <TableView fx:id="tableCombos" layoutX="14.0" layoutY="440.0" onMouseClicked="#getComboSelected" prefHeight="170.0" prefWidth="587.0" />
       <TableView fx:id="tableMenu" layoutX="14.0" layoutY="171.0" onMouseClicked="#getDishSelected" prefHeight="242.0" prefWidth="587.0" />
       <TableView fx:id="tableBill" layoutX="664.0" layoutY="160.0" onMouseClicked="#deleteElement" prefHeight="242.0" prefWidth="514.0" />
       <TextField fx:id="inputAddress" disable="true" layoutX="920.0" layoutY="472.0" prefHeight="26.0" prefWidth="254.0" promptText="Recoger en restaurante" />
+      <Button fx:id="myOrders" layoutX="1002.0" layoutY="27.0" mnemonicParsing="false" onAction="#openMyOrders" text="Mis pedidos" />
+      <Text layoutX="728.0" layoutY="567.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el modo de pago:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <ChoiceBox fx:id="choicePay" layoutX="935.0" layoutY="548.0" prefHeight="26.0" prefWidth="164.0" />
    </children>
 </AnchorPane>

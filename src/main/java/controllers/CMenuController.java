@@ -29,15 +29,18 @@ public class CMenuController implements Initializable {
     @FXML private Text textTime;
     @FXML private TextField inputAddress;
     @FXML private CheckBox checkBoxExpress;
+    @FXML private ChoiceBox<String> choicePay;
 
     int total = 0;
     int totalTime = 0;
 
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            String[] payMethods = {"Tarjeta de credito", "Efectivo", "Cheque", "Transferecia"};
             Menu.orderList.clear();
             Connection connection = DBConnection.Companion.getConnection();
-
+            choicePay.getItems().addAll(payMethods);
+            choicePay.getSelectionModel().selectFirst();
             setTableViewCombo();
             setTableViewMenu();
             setTableViewOrder();
@@ -96,6 +99,11 @@ public class CMenuController implements Initializable {
     }
 
     @FXML
+    void openMyOrders(ActionEvent event) throws IOException {
+        WindowBuilder.Companion.createPopUp("../views/myOrders.fxml", event, "Mis pedidos");
+    }
+
+    @FXML
     void deleteElement(MouseEvent event) {
         try {
             Object object = tableBill.getSelectionModel().getSelectedItem();
@@ -124,25 +132,29 @@ public class CMenuController implements Initializable {
 
     @FXML
     void payOrder(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
-        Connection connection = DBConnection.Companion.getConnection();
-        int count = DBConnection.Companion.getOrdersCount(connection) + 1;
-        if(checkBoxExpress.isSelected()) {
-            DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getText(),
-                    Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
-        } else {
-            DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getPromptText(),
-                    Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
-        }
-        for (Object obj :
-                Menu.orderList) {
-            if (obj.getClass() == Dish.class){
-                DBConnection.Companion.addOrderDetails(connection, count, ((Dish) obj).getName(), 1);
+        if(Menu.orderList.size() > 0) {
+            Connection connection = DBConnection.Companion.getConnection();
+            int count = DBConnection.Companion.getOrdersCount(connection) + 1;
+            if (checkBoxExpress.isSelected()) {
+                DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getText(),
+                        Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
             } else {
-                DBConnection.Companion.addOrderDetails(connection, count, ((Combo) obj).getName(), 2);
+                DBConnection.Companion.processOrder(connection, Menu.userName, inputAddress.getPromptText(),
+                        Integer.valueOf(textTotal.getText()), choiceBOffice.getValue());
             }
+            for (Object obj :
+                    Menu.orderList) {
+                if (obj.getClass() == Dish.class) {
+                    DBConnection.Companion.addOrderDetails(connection, count, ((Dish) obj).getName(), 1);
+                } else {
+                    DBConnection.Companion.addOrderDetails(connection, count, ((Combo) obj).getName(), 2);
+                }
+            }
+            WindowBuilder.Companion.createPopUp("../views/cRating.fxml", event, "Califique nuestro servicio");
+            //TODO: Clean up tables and labels
+        } else {
+            new Alert(Alert.AlertType.ERROR, "No se han ingresado productos").showAndWait();
         }
-        WindowBuilder.Companion.createPopUp("../views/cRating.fxml", event, "Califique nuestro servicio");
-        //TODO: Clean up tables and labels
     }
 
     @FXML

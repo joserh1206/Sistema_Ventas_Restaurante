@@ -1,15 +1,12 @@
 package code
 
-import code.Menu.comboList
-import code.Menu.dishList
+import code.Menu.*
 import code.Payroll.employeeList
 import java.lang.Exception
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.SQLException
 import javafx.collections.ObservableList
 import javafx.scene.control.Button
+import java.sql.*
+import java.text.SimpleDateFormat
 
 
 class DBConnection {
@@ -111,6 +108,121 @@ class DBConnection {
             }
             return comboList
         }
+
+        @Throws(SQLException::class)
+        fun getAllBills(con: Connection): ObservableList<Order> {
+            Menu.billList.clear()
+            val query = "{ call getOrders() }"
+            val format = SimpleDateFormat("dd/MM/yyy")
+            val call = con.prepareCall(query)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var total = resultSet.getInt(1)
+                var office = resultSet.getString(2)
+                var date = resultSet.getDate(3)
+                var order = Order(total, office, format.format(date).toString())
+                billList.add(order)
+            }
+            return billList
+        }
+
+        @Throws(SQLException::class)
+        fun getAllBillsByOffice(con: Connection, id: Int): ObservableList<Order> {
+            Menu.billList.clear()
+            val query = "{ call getOrdersByOffice(?) }"
+            val format = SimpleDateFormat("dd/MM/yyy")
+            val call = con.prepareCall(query)
+            call.setInt(1, id)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var total = resultSet.getInt(1)
+                var office = resultSet.getString(2)
+                var date = resultSet.getDate(3)
+                var order = Order(total, office, format.format(date).toString())
+                billList.add(order)
+            }
+            return billList
+        }
+
+        @Throws(SQLException::class)
+        fun getOrdersByClient(con: Connection): ObservableList<OrderProduct> {
+            Menu.billDetailList.clear()
+            val query = "{ call getOrdersByClient(?) }"
+            val format = SimpleDateFormat("dd/MM/yyy")
+            val call = con.prepareCall(query)
+            call.setString(1, Menu.userName)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var name = resultSet.getString(1)
+                var total = resultSet.getInt(2)
+                var office = resultSet.getString(3)
+                var date = resultSet.getDate(4)
+                var order = OrderProduct(name, total, office, format.format(date).toString())
+                billDetailList.add(order)
+            }
+            return billDetailList
+        }
+
+        @Throws(SQLException::class)
+        fun getAllProducts(con: Connection): ObservableList<OrderProduct> {
+            Menu.billDetailList.clear()
+            val query = "{ call getDishReports() }"
+            val format = SimpleDateFormat("dd/MM/yyy")
+            val call = con.prepareCall(query)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var name = resultSet.getString(1)
+                var total = resultSet.getInt(2)
+                var office = resultSet.getString(3)
+                var date = resultSet.getDate(4)
+                var order = OrderProduct(name, total, office, format.format(date).toString())
+                billDetailList.add(order)
+            }
+            val query2 = "{ call getComboReports() }"
+            val call2 = con.prepareCall(query2)
+            var resultSet2 = call2.executeQuery()
+            while (resultSet2.next()) {
+                var name = resultSet2.getString(1)
+                var total = resultSet2.getInt(2)
+                var office = resultSet2.getString(3)
+                var date = resultSet2.getDate(4)
+                var order = OrderProduct(name, total, office, format.format(date).toString())
+                billDetailList.add(order)
+            }
+            return billDetailList
+        }
+
+        @Throws(SQLException::class)
+        fun getAllProductsByOffice(con: Connection, id: Int): ObservableList<OrderProduct> {
+            Menu.billDetailList.clear()
+            val query = "{ call getDishReportsByOffice(?) }"
+            val format = SimpleDateFormat("dd/MM/yyy")
+            val call = con.prepareCall(query)
+            call.setInt(1, id)
+            var resultSet = call.executeQuery()
+            while (resultSet.next()) {
+                var name = resultSet.getString(1)
+                var total = resultSet.getInt(2)
+                var office = resultSet.getString(3)
+                var date = resultSet.getDate(4)
+                var order = OrderProduct(name, total, office, format.format(date).toString())
+                billDetailList.add(order)
+            }
+            val query2 = "{ call getComboReportsByOffice(?) }"
+            val call2 = con.prepareCall(query2)
+            call2.setInt(1, id)
+            var resultSet2 = call2.executeQuery()
+            while (resultSet2.next()) {
+                var name = resultSet2.getString(1)
+                var total = resultSet2.getInt(2)
+                var office = resultSet2.getString(3)
+                var date = resultSet2.getDate(4)
+                var order = OrderProduct(name, total, office, format.format(date).toString())
+                billDetailList.add(order)
+            }
+            return billDetailList
+        }
+
 
         @Throws(SQLException::class)
         fun viewAllCombos(con: Connection): ObservableList<Combo> {

@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="578.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReportsController">
+<AnchorPane prefHeight="400.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReportsController">
    <children>
-      <TreeTableView fx:id="tableReports" layoutX="42.0" layoutY="66.0" prefHeight="267.0" prefWidth="516.0" />
-      <Text layoutX="42.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total vendido:">
+      <Text layoutX="17.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total vendido:">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fx:id="textTotalSold" layoutX="153.0" layoutY="370.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="textTotalSold" layoutX="125.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="118.39994812011719">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text layoutX="42.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reportes">
+      <Text layoutX="17.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reportes">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="buttonBack" layoutX="495.0" layoutY="25.0" mnemonicParsing="false" text="Volver" />
+      <Button fx:id="buttonBack" layoutX="1110.0" layoutY="25.0" mnemonicParsing="false" onAction="#goBack" text="Volver" />
+      <TableView fx:id="tableReports" layoutX="14.0" layoutY="71.0" prefHeight="276.0" prefWidth="542.0" />
+      <Text layoutX="17.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ventas por fecha y sucursal (Todos)" />
+      <TableView fx:id="tableReports1" layoutX="618.0" layoutY="71.0" prefHeight="276.0" prefWidth="542.0" />
+      <Separator layoutX="582.0" layoutY="20.0" orientation="VERTICAL" prefHeight="358.0" prefWidth="0.0" />
+      <Text layoutX="618.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ventas por fecha y sucursal (Productos)" />
+      <Text layoutX="285.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comisiones otorgadas:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <Text fx:id="textTotalCom" layoutX="445.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="118.39994812011719">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
