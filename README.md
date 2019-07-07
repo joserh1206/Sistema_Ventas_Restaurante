@@ -1,8 +1,8 @@
 Sistema para el poder automatizar y agilizar procesos en un restaurante. 
 Requerimientos:
-El restaurante actualmente cuenta con 3 sucursales en diferentes partes del GAM. 
-Cada sucursal tiene un gerente y un conjunto de empleados diferentes como cajeros, repartidores, cocineros, saloneros, etc. 
-Los salarios de cada uno de los puestos, tiene un rango donde un empleado para un puesto no puede tener un salario ni más alto ni más bajo de lo indicado en el rango salarial. 
+>> El restaurante actualmente cuenta con 3 sucursales en diferentes partes del GAM. 
+>> Cada sucursal tiene un gerente y un conjunto de empleados diferentes como cajeros, repartidores, cocineros, saloneros, etc. 
+>> Los salarios de cada uno de los puestos, tiene un rango donde un empleado para un puesto no puede tener un salario ni más alto ni más bajo de lo indicado en el rango salarial. 
 Todas las sucursales venden el mismo menú y al mismo precio. 
 El menu y el precio puede ser modificado únicamente por el gerente general. 
 Pueden crear “promociones” Armando combos. 
